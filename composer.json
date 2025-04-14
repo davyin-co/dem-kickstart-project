@@ -1,0 +1,157 @@
+{
+    "name": "davyin/dem-kickstart-project",
+    "description": "Provides a Composer template for a new Davyin DEM project",
+    "license": "GPL-2.0-or-later",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Ziqiang",
+            "role": "ziqiang.wang@davyin.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "cweagans/composer-patches": "^1.7",
+        "davyin/drupal_settings": "dev-main",
+        "davyin/dyniva": "3.1.x-dev",
+        "drush/drush": "^13",
+        "oomphinc/composer-installers-extender": "^1.1 || ^2.0"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.13",
+        "zaporylie/composer-drupal-optimizations": "^1.1"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets-packagist": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "ergebnis/composer-normalize": true,
+            "mnsami/composer-custom-directory-installer": true,
+            "oomphinc/composer-installers-extender": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "tbachert/spi": true,
+            "zaporylie/composer-drupal-optimizations": true
+        },
+        "bin-dir": "bin",
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "extra": {
+        "composer-exit-on-patch-failure": false,
+        "composer-normalize": {
+            "indent-size": 4,
+            "indent-style": "space"
+        },
+        "drupal-scaffold": {
+            "file-mapping": {
+                "[web-root]/sites/default/default.settings.php": {
+                    "mode": "replace",
+                    "overwrite": true,
+                    "path": "vendor/davyin/drupal_settings/assets/default.settings.php"
+                },
+                "[web-root]/sites/default/dev.services.yml": {
+                    "mode": "replace",
+                    "overwrite": false,
+                    "path": "vendor/davyin/drupal_settings/assets/dev.services.yml"
+                },
+                "[web-root]/sites/default/prod.services.yml": {
+                    "mode": "replace",
+                    "overwrite": false,
+                    "path": "vendor/davyin/drupal_settings/assets/prod.services.yml"
+                },
+                "[web-root]/sites/default/settings.local.php": {
+                    "mode": "replace",
+                    "overwrite": false,
+                    "path": "vendor/davyin/drupal_settings/assets/settings.local.php"
+                },
+                "[web-root]/sites/default/settings.php": {
+                    "mode": "replace",
+                    "overwrite": false,
+                    "path": "vendor/davyin/drupal_settings/assets/default.settings.php"
+                },
+                "[web-root]/sites/default/settings.platform.php": {
+                    "mode": "replace",
+                    "overwrite": false,
+                    "path": "vendor/davyin/drupal_settings/assets/settings.platform.php"
+                }
+            },
+            "locations": {
+                "web-root": "docroot/"
+            }
+        },
+        "enable-patching": true,
+        "installer-paths": {
+            "docroot/core": [
+                "type:drupal-core"
+            ],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset",
+                "harvesthq/chosen"
+            ],
+            "docroot/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "docroot/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "docroot/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "docroot/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "docroot/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "docroot/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
+        },
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ]
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@remove-git-submodules",
+            "@format"
+        ],
+        "post-update-cmd": [
+            "@remove-git-submodules",
+            "@format"
+        ],
+        "post-create-project-cmd": [
+            "rm -r -f .travis.yml .travis-ci",
+            "@remove-git-submodules"
+        ],
+        "format": "composer normalize --no-update-lock --no-check-lock",
+        "quick-start": [
+            "composer install",
+            "php docroot/core/scripts/drupal quick-start dyniva --no-interaction"
+        ],
+        "remove-git-submodules": "find . -mindepth 2 -type d -name .git | xargs rm -rf"
+    }
+}

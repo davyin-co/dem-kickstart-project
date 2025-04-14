@@ -104,6 +104,9 @@
             "docroot/core": [
                 "type:drupal-core"
             ],
+            "docroot/recipes/contrib/{$name}": [
+                "type:drupal-recipe"
+            ],
             "docroot/libraries/{$name}": [
                 "type:drupal-library",
                 "type:bower-asset",
@@ -131,7 +134,8 @@
         },
         "installer-types": [
             "bower-asset",
-            "npm-asset"
+            "npm-asset",
+            "drupal-recipe"
         ]
     },
     "scripts": {
